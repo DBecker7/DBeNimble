@@ -52,3 +52,4 @@ nimbleMCMC_samples <- nimbleMCMC(code = pumpCode,
 - `data` is the target, `constants` are the features (incl., *e.g.*, `n = length(response)`)
 - Matrix multiplication retains matrix class, must extract into vector.
     - `(beta[1:p] %*% x[i, 1:p])[1,1]`
+- `tau2 ~ dgamma(1,1)`; `Y[i] ~ dnorm(0, sd = 1/sqrt(tau2))`
