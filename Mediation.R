@@ -80,16 +80,17 @@ samples_long <- pivot_longer(samples_df, -c("iter", "chain"))
 ggplot(samples_long) +
     aes(x = iter, y = value, colour = factor(chain)) +
     geom_line() + 
-    facet_wrap(~ name)
+    facet_wrap(~ name) +
+    labs(title = "Convergence is Excellent.")
 
 ggplot(samples_df) +
     aes(x = AlphaBeta, colour = factor(chain)) +
     geom_density() +
     geom_vline(xintercept = ab) +
-    labs(title = "Indirect effect",
+    labs(title = "Indirect Effect",
         subtitle = "Black line is MLE from Frequentist analysis")
 
-# In conclusion, Nimble does this just fine and Bayesian estmates are
+# In conclusion, Nimble does this just fine and Bayesian estimates are
 # equivalent to frequentist results.
 
 # Hooray
