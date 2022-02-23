@@ -41,7 +41,21 @@ nimbleMCMC_samples <- nimbleMCMC(code = pumpCode,
     constants = pumpConsts, 
     data = pumpData, 
     inits = pumpInits,
-    nburnin = 1000, niter = 10000)
+    nburnin = 1000, niter = 10000,
+    monitors = c("alpha", "beta", "theta"),
+    samplesAsCodaMCMC = TRUE)
+
+samples_df <- lapply(1:length(nimbleMCMC_samples), function(x) {
+    df = as.data.frame(nimbleMCMC_samples[[x]])
+    df$chain <- x
+    df$iter <- 1:nrow(df)
+    df
+}) %>% bind_rows() 
+
+ggplot(nimbleMCMC_samples) +
+    aes(x = iter, y = value, colour = factor(chain)) +
+    geom_line() + 
+    facet_wrap(~ name)
 ```
 
 
