@@ -29,7 +29,7 @@ print(paste0("Indirect effect (b - b prime): ", round(bbprime, 3)))
 print(paste0("total effect:                  ", round(ab + coef(ymx)["x"], 3)))
 
 # Bayesian version ----------------------------------------
-
+# Yuan and MacKinnon (2009), Bayesian Mediation Analysis.
 code <- nimbleCode({
     # Model
     for (i in 1:N) {
