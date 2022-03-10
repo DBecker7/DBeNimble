@@ -36,13 +36,19 @@ pumpData <- list(x = c(5, 1, 5, 14, 3, 19, 1, 1, 4, 22))
 pumpInits <- list(alpha = 1, beta = 1,
     theta = rep(0.1, pumpConsts$N))
 # Could also specify inits as a function for arbitrary number of chains
+pumpInitsFun <- function() {
+    alpha = runif(1, 0.5, 1.5),
+    beta = runif(1, 0.5, 1.5),
+    theta = runif(pumpConsts$N, 0, 0.2)
+}
 
 nimbleMCMC_samples <- nimbleMCMC(code = pumpCode, 
     constants = pumpConsts, 
     data = pumpData, 
-    inits = pumpInits,
+    inits = pumpInits, # inits = pumpInitsFun
     nburnin = 1000, niter = 10000,
     monitors = c("alpha", "beta", "theta"),
+    # monitors = names(pumpInitsFun()),
     samplesAsCodaMCMC = TRUE)
 
 samples_df <- lapply(1:length(nimbleMCMC_samples), function(x) {
