@@ -1,0 +1,39 @@
+---
+title: "Priors on Fixed Effects in R-INLA"
+author: Devan Becker
+---
+
+I had a hard time finding an explanation for how to specify the prior distribution for the fixed effects, so I'm recording my results here.
+
+We'll start by simulating the data:
+
+```{r}
+library(INLA) 
+
+x <- runif(40, 0, 10)
+x2 <- runif(length(x), 0, 10)
+y <- 2 + 4*x - 3*x2 + rnorm(length(x), 0, 3)
+```
+
+Now let's fit the model in INLA. The priors are set by the `control.fixed()` function. The prior for the intercept is set via `mean.intercept` and `prec.intercept`. For all other fixed effects, the prior is set by passing a named list into the `mean` and `prec` arguments.
+
+Note that I also provided a prior for the non-existent effect for `x3`, which is rightfully ignored.
+
+```{r}
+res <- inla(y ~ x + x2, 
+    data = data.frame(x = x, x2 = x2, y = y), 
+    family = "gaussian",
+    control.fixed = list(
+        mean.intercept = 2, 
+        prec.intercept = 1/10, 
+        mean = list(x = 0, x2 = 0, x3 = 1),
+        prec = list(x = 1/1000, x2 = 1/1000, x3 = 1/10)
+    )
+)
+```
+
+And the results (compared to the `lm()` function):
+
+```{r}
+cbind(res$summary.fixed[, 1:2], summary(lm(y ~ x + x2))$coef[,1:2])
+```
