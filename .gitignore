@@ -38,4 +38,7 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Added
 /Nimble_participant_files/
+!Nimble_participant_files/Notes.md
