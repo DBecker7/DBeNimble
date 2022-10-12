@@ -42,6 +42,9 @@ pumpInitsFun <- function() {
     theta = runif(pumpConsts$N, 0, 0.2)
 }
 
+# The basic way
+# Andrew Lawson cautions that most people *shouldn't* use this
+    # Instead, set up each set individually and be careful
 nimbleMCMC_samples <- nimbleMCMC(code = pumpCode, 
     constants = pumpConsts, 
     data = pumpData, 
