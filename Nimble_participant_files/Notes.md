@@ -1,0 +1,48 @@
+# NIMBLE Notes
+
+- He says that the "model, compile, configure, build, ..." is most commonly used by practitioners.
+- He pronounces it "Wake".
+- Random effects: Things that you believe are there but have not measured.
+    - Unobserved covariates, which can be estimated due to repetitions (e.g. hierarchical models). 
+- Convolution model: optimal at recovering true risk from disease maps.
+    - $\log(\theta_i) = \beta_0 + \mathbf{z}_{1,i} + \mathbf{z}_{2,i}$
+    - $z_1$ is an intercept
+    - $z_2$ is Normal with a mean based on the values around ig (neigbourhood). 
+    - It's an "adaptive" model since it accounts for neighbourhood structure
+- Uncorrelated Heterogeneity
+    - Random noise model, a.k.a. baseline risk model
+        - By "random noise", he means random intercept and slopes.
+- Precisions
+    - Gamma: `tau ~ Gamma(a,b)`
+    - SD-uniform: `tau^(-1/2) ~ unif(0, c)`
+    - In nimble, it's more stable to use Gamma with a,b << 1. 
+        - In nimble, he seems to like `tau ~ gamma(2, 0.5)` as "weakly informative". 
+- When to use a prior and when to fix things
+    - If it's fixed, then it's not estimable!
+        - If you want the data to speak about a parameter, then it must have a prior distribution!
+- ICAR models
+    - Must define an adjacency matrix
+        - Also number of neighbours
+    - Convolutional is the same as BYM, or very close.
+- Best to check Gelman, Geweke, and trace plots
+- CAR models might steal the effect of covariate effects
+    - If the covariate has a spatial structure, then it's possible that some of that effect is absorbed into the spatial random effect. 
+- `prex[i] <- step(theta[i]-1)` allows us to find hotspots in Poisson modelling
+    - Monitoring prex gives us an average of prex over the whole sample
+    - `prex[i] == 1` if `theta > 1`
+        - "PREX" = Probability of Exceedence, where theta > 1 is exceedence since this increases the Poisson mean (E(Y) = e*theta)
+    - This is clustering within a Bayesian model without explicitly modelling clusters.
+- Nimble (and anything with nested indexing) allows for true multi-level models
+- Nimble can handle much larger data sets thanks to compilation.
+- Median is NOT a Bayesian estimator (must be a function of integrals, which mean is but median isn't). 
+- NIMBLE vs. INLA: INLA isn't as flexible.
+- NIMBLE vs. STAN: 
+    - Different syntax, but R package is user-friendly
+    - Uses HMC, which is nice (NIMBLE is working on it)
+    - Limitations on discrete priors in STAN
+- What if two parameters are not identified
+    - "Do we have to be 100% converged? I think the answer is that the jury's out on that one."
+    - In large models, some parameters may be confounded and never converged. If we're not concerned with these parameters and they come together to create and effect, then it's probably fine. 
+- Manhattan skylines: long flat periods followed by jumps to new values, then stability there. 
+    - HMC and MALA avoid this.
+    - Gibbs is nice because it uses marginal distributions. 
