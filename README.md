@@ -65,6 +65,9 @@ ggplot(nimbleMCMC_samples) +
     aes(x = iter, y = value, colour = factor(chain)) +
     geom_line() + 
     facet_wrap(~ name)
+
+# Since I specified `samplesAsCodaMCMC = TRUE`, coda functions all work
+coda::gelman.diag(nimbleMCMC_samples)
 ```
 
 
